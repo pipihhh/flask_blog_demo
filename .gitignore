@@ -102,9 +102,7 @@ venv.bak/
 
 # mypy
 .mypy_cache/
-<<<<<<< HEAD
-=======
 .idea*
 migrations*
 demo/__pycache_*
->>>>>>> first commit
+
