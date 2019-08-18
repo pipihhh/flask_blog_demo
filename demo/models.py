@@ -5,9 +5,11 @@ import datetime
 
 
 class ArticleInfo(db.Model):
+    """文章简介表"""
     __tablename__ = "blog_article_info"
     id = Column(Integer, primary_key=True, comment="主键字段")
     title = Column(VARCHAR(256), nullable=False, comment="文章标题")
+    avatar = Column(VARCHAR(128), nullable=False, comment="头像路径")
     summary = Column(VARCHAR(1024), nullable=False, comment="文章简介")
     traffic = Column(Integer, nullable=False, comment="文章的浏览量", default=0)
     create_time = Column(DATETIME, nullable=False, comment="创建时间", default=datetime.datetime.now())
@@ -20,6 +22,7 @@ class ArticleInfo(db.Model):
 
 
 class ArticleDetail(db.Model):
+    """文章详细表"""
     __tablename__ = "blog_article_detail"
     id = Column(Integer, primary_key=True, comment="主键")
     content = Column(TEXT, nullable=False, comment="文章内容")
@@ -28,6 +31,7 @@ class ArticleDetail(db.Model):
 
 
 class ViewCount(db.Model):
+    """页面访问日志表"""
     __tablename__ = "sys_view"
     id = Column(Integer, primary_key=True, comment="主键")
     ip = Column(VARCHAR(20), nullable=False, comment="访问者IP")
@@ -35,6 +39,7 @@ class ViewCount(db.Model):
 
 
 class UserInfo(db.Model):
+    """用户表"""
     __tablename__ = "sys_user"
     id = Column(Integer, primary_key=True, comment="主键")
     username = Column(VARCHAR(20), unique=True, nullable=False, comment="用户名")
@@ -42,6 +47,7 @@ class UserInfo(db.Model):
 
 
 class UserAuth(db.Model):
+    """认证token表"""
     __tablename__ = "sys_auth"
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("sys_user.id"), nullable=False)

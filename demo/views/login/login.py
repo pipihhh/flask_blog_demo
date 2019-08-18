@@ -16,7 +16,6 @@ class UserView(views.MethodView):
         md5 = hashlib.md5(bytes(current_app.config["SALT"], encoding=current_app.config["CHARSET"]))
         md5.update(bytes(pwd, encoding=current_app.config["CHARSET"]))
         ret = models.UserInfo.query.filter_by(username=username, password=md5.hexdigest()).first()
-        print(ret)
         if ret:
             token = str(uuid.uuid4())
             auth = models.UserAuth.query.filter_by(user_id=ret.id).first()
