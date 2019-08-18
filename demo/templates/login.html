@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>login</title>
+    <script src='http://cdn.bootcss.com/jquery/3.4.1/jquery.min.js'></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #ffffff;
+            ;
+        }
+
+        .register {
+            width: 300px;
+            height: 270px;
+            margin: 80px auto;
+            padding: 15px 30px;
+            background: #eee;
+            border-radius: 5px;
+        }
+
+        .title {
+            height: 35px;
+        }
+
+        .title span {
+            font-size: 16px;
+            font-weight: bold;
+            color: #666;
+            margin-right: 30px;
+            cursor: pointer;
+        }
+
+        .title span.current {
+            color: rgb(205, 159, 231);
+        }
+
+        .form div {
+            width: 290px;
+            height: 30px;
+            border-radius: 8px;
+            background: #fff;
+            margin-bottom: 25px;
+            padding: 8px 10px;
+            position: relative;
+        }
+
+        .form div span {
+            display: inline-block;
+            padding-top: 5px;
+            padding-right: 3px;
+            color: #666;
+        }
+
+        .form div input {
+            border: none;
+            outline: none;
+            font-size: 17px;
+            color: #666;
+            background: none;
+        }
+
+        .form .info {
+            margin-top: 10px;
+            color: red;
+            ;
+            padding-left: 2px;
+            font-size: 14px;
+        }
+
+        .button {
+            padding-top: 7px;
+        }
+
+        .button a {
+            display: none;
+            width: 100%;
+            height: 45px;
+            line-height: 45px;
+            text-align: center;
+            text-decoration: none;
+            background: rgb(205, 159, 231);
+            ;
+            color: #fff;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .button a.show {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+    <div class="register">
+        <p class="title" id="title">
+            <span>登 录</span>
+            <span class="current">注 册</span>
+        </p>
+        <div class="form">
+            <div>
+                <span>+86</span>
+                <input type="text" name="user" id="user" placeholder="请输入注册手机号" autocomplete="off" />
+                <p class="info" id="user_info"></p>
+            </div>
+            <div>
+                <input type="password" name="pwd" id="pwd" placeholder="请设置您的密码">
+                <p class="info" id="pwd_info"></p>
+            </div>
+            <p class="button">
+                <a href="javascript:void(0)" id="sigup-btn" class="btn show">注 册</a>
+                <a href="javascript:void(0)" id="login-btn" class="btn">登 录</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        var userReg = /^1[3578]\d{9}$/,
+            pwdReg = /^\w{5,12}$/,
+            sigup = document.getElementById("sigup-btn"),
+            login = document.getElementById("login-btn"),
+            titles = document.getElementById("title").getElementsByTagName("span");
+        
+        //显示登陆
+        function showLogin(){
+            titles[0].className = "current";
+            titles[1].className = "";
+            login.className = "show";
+            sigup.className = "";
+            $('#pwd').attr('placeholder','请输入密码');
+            $('#user_info').text('');
+            $('#pwd_info').text('');
+            $('#user').val('');
+            $('#pwd').val('');
+        }
+
+         // 显示注册
+        function showSigup(){
+            titles[1].className = "current";
+            titles[0].className = "";
+            login.className = "";
+            sigup.className = "show";
+            $('#pwd').attr('placeholder','请设置您的密码');
+            $('#user_info').text('');
+            $('#pwd_info').text('');
+            $('#user').val('');
+            $('#pwd').val('');
+        }
+        titles[0].addEventListener("click",showLogin,false);
+        titles[1].addEventListener("click",showSigup,false);
+        //检测用户名
+        $('#user').blur(function () {
+            if ($(this).val() == '') {
+                $('#user_info').text('用户名不能为空').css({'color':'red'});
+            } else if (!userReg.test($(this).val())) {
+                $('#user_info').text('请输入正确的手机号').css({'color':'red'});
+            } else {
+                $('#user_info').text('算你蒙对了').css({ 'color': 'green' });
+            }
+        });
+        //检测密码
+        $('#pwd').blur(function () {
+            if ($(this).val() == '') {
+                $('#pwd_info').text('密码不能为空').css({'color':'red'});
+            } else if (!pwdReg.test($(this).val())) {
+                $('#pwd_info').text('请输入6到12位的数字、字母或下划线').css({'color':'red'});
+            } else {
+                $('#pwd_info').text('设置成功！').css({ 'color': 'green' });
+            }
+        });
+        //提交注册信息
+        $('#sigup-btn').on('click', function () {
+            $.ajax({
+                url: '/login',
+            type: 'POST',
+            data: {
+                username: $('#user').val(),
+                pwd: $('#pwd').val()
+            },
+            success: function(data){
+                alert("注册成功，请登录！");
+                // 显示登录界面
+                showLogin();
+                // 清空文本框
+                $('#user').val('');
+                $('#pwd').val('');
+            },
+            error: function(){
+                $('#pwd_info').html('注册失败，请重试');
+            }
+            });
+        });
+
+        //提交登陆信息
+        $('#login-btn').on('click', function () {
+            $.ajax({
+                url: '/login',
+            type: 'POST',
+            data: {
+                username: $('#user').val(),
+                pwd: $('#pwd').val()
+            },
+            success: function(data){
+                alert("登陆成功！");
+                console.log(data);
+                if(data.code === 200){
+                    location.href = data.msg;
+                }
+            }
+            });
+        });
+    </script>
+</body>
+
+</html>

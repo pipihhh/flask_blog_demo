@@ -32,3 +32,17 @@ class ViewCount(db.Model):
     id = Column(Integer, primary_key=True, comment="主键")
     ip = Column(VARCHAR(20), nullable=False, comment="访问者IP")
     create_time = Column(DATETIME, nullable=False, comment="访问时间", default=datetime.datetime.now())
+
+
+class UserInfo(db.Model):
+    __tablename__ = "sys_user"
+    id = Column(Integer, primary_key=True, comment="主键")
+    username = Column(VARCHAR(20), unique=True, nullable=False, comment="用户名")
+    password = Column(VARCHAR(32), nullable=False, comment="密码")
+
+
+class UserAuth(db.Model):
+    __tablename__ = "sys_auth"
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("sys_user.id"), nullable=False)
+    token = Column(VARCHAR(50), nullable=False, comment="用户token")
